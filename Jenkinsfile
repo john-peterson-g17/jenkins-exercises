@@ -16,7 +16,11 @@ pipeline {
                 script {
                     echo "node --version"
                     echo "Change to workspace directory..."
+                    sh 'pwd'
+                    sh 'ls -alh'
                     sh 'cd ./app'
+                    sh 'pwd'
+                    sh 'ls -alh'
                     echo "Installing npm packages..."
                     sh 'npm install'
                     echo "Running tests..."
