@@ -22,13 +22,20 @@ pipeline {
                 }
             }
         }
-        // stage('Build') {
-        //     steps {
-        //         script {
-        //             echo "Building Docker Image..."
-        //             sh 'docker build -t node-app .'
-        //         }
-        //     }
-        // }
+        stage('Build') {
+            environment {
+                DOCKERHUB_CREDS = credentials('dockerhub')
+                // TODO: Build image and push to dockerhub
+                // TODO: Tag image with version
+                // TODO: Increment version in package.json and commit to git
+                // TODO: Access dockerhub creds with $DOCKERHUB_CREDS_USR and $DOCKERHUB_CREDS_PSW
+            }
+            steps {
+                script {
+                    echo "Building Docker Image..."
+                    sh 'docker build -t node-app .'
+                }
+            }
+        }
     }
 }
