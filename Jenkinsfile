@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                script {
+                dir('app') {
                     echo "node --version"
                     echo "Change to workspace directory..."
                     sh 'pwd'
