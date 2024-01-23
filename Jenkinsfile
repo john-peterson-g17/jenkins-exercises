@@ -14,6 +14,8 @@ pipeline {
             steps {
                 script {
                     echo "node --version"
+                    echo "Change to workspace directory..."
+                    sh 'cd ./app'
                     echo "Installing npm packages..."
                     sh 'npm install'
                     echo "Running tests..."
