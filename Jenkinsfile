@@ -9,6 +9,7 @@ pipeline {
     //             script: 'echo cat package.json | jq -r ".version"'
     //         )}"""
     // }
+    // // Test Push
     stages {
         stage('Test') {
             steps {
