@@ -1,10 +1,33 @@
 pipeline {
-    agent { dockerfile true }
+    agent any
+    tools {
+        nodejs 'node-21'
+    }
+    // environment { 
+    //     VERSION = """${sh(
+    //             returnStdout: true,
+    //             script: 'echo cat package.json | jq -r ".version"'
+    //         )}"""
+    // }
     stages {
         stage('Test') {
             steps {
-                sh 'node --version'
+                script {
+                    echo "node --version"
+                    echo "Installing npm packages..."
+                    sh 'npm install'
+                    echo "Running tests..."
+                    sh 'npm run test'
+                }
             }
         }
+        // stage('Build') {
+        //     steps {
+        //         script {
+        //             echo "Building Docker Image..."
+        //             sh 'docker build -t node-app .'
+        //         }
+        //     }
+        // }
     }
 }
