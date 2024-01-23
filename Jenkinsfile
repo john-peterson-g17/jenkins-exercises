@@ -14,7 +14,7 @@ pipeline {
         stage('Test') {
             steps {
                 dir('app') {
-                    echo "node --version"
+                    sh "node --version"
                     echo "Installing npm packages..."
                     sh 'npm install'
                     echo "Running tests..."
