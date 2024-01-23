@@ -18,7 +18,7 @@ pipeline {
                     echo "Change to workspace directory..."
                     sh 'pwd'
                     sh 'ls -alh'
-                    sh 'cd ./app'
+                    sh 'cd app'
                     sh 'pwd'
                     sh 'ls -alh'
                     echo "Installing npm packages..."
