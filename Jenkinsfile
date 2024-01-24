@@ -3,14 +3,13 @@ pipeline {
     tools {
         nodejs 'node-21'
     }
-    // environment { 
-    //     VERSION = """${sh(
-    //             returnStdout: true,
-    //             script: 'echo cat package.json | jq -r ".version"'
-    //         )}"""
-    // }
-    // // Test Push
     stages {
+        stage('Increment Version') {
+            steps {
+                env.VERSION = sh(script: 'npm version patch', returnStdout: true).trim()
+                echo "Version: ${env.VERSION}"
+            }
+        }
         stage('Test') {
             steps {
                 dir('app') {
@@ -23,17 +22,35 @@ pipeline {
             }
         }
         stage('Build') {
-            environment {
-                DOCKERHUB_CREDS = credentials('dockerhub')
-                // TODO: Build image and push to dockerhub
-                // TODO: Tag image with version
-                // TODO: Increment version in package.json and commit to git
-                // TODO: Access dockerhub creds with $DOCKERHUB_CREDS_USR and $DOCKERHUB_CREDS_PSW
-            }
             steps {
                 script {
-                    echo "Building Docker Image..."
-                    sh 'docker build -t node-app .'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
+                        echo "Building Docker Image..."
+                        sh 'docker build -t johnpdevops/node-app:$VERSION .'
+                        echo "Logging in to DockerHub..."
+                        sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+                        echo "Pushing Docker Image..."
+                        sh 'docker push johnpdevops/node-app:$VERSION'
+                    }
+                }
+            }
+        }
+        stage('Commit Version to Repository') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'github', passwordVariable: 'GITHUB_PASSWORD', usernameVariable: 'GITHUB_USERNAME')]) {
+                        echo "Commiting new version to git repository..."
+
+                        sh 'git config user.email "jenkins@example.com"'
+                        sh 'git config user.name "Jenkins"'
+
+                        sh 'git remote set-url origin https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}github.com/john-peterson-g17/jenkins-exercises'
+                        sh 'git add .'
+                        sh 'git commit -m "Incremented version to $VERSION"'
+
+                        echo "Pushing new version to git repository..."
+                        sh 'git push origin main'
+                    }
                 }
             }
         }
