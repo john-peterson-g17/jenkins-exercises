@@ -48,7 +48,7 @@ pipeline {
                         sh 'git config user.email "jenkins@example.com"'
                         sh 'git config user.name "Jenkins"'
 
-                        sh 'git remote set-url origin https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}github.com/john-peterson-g17/jenkins-exercises'
+                        sh 'git remote set-url origin https://${GITHUB_USERNAME}:${GITHUB_PASSWORD}@github.com/john-peterson-g17/jenkins-exercises'
                         sh 'git add .'
                         sh 'git commit -m "Incremented version to $VERSION"'
 
