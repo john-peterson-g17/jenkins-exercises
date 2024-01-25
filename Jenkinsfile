@@ -7,7 +7,7 @@ pipeline {
         stage('Increment Version') {
             steps {
                 script {
-                    cd ./app
+                    sh "cd ./app"
                     env.VERSION = """${sh(script: 'npm version patch', returnStdout: true).trim()}"""
                     echo "Version: ${env.VERSION}"
                 }
@@ -29,7 +29,7 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
                         echo "Building Docker Image..."
-                        sh 'docker build -t johnpdevops/node-app:$VERSION .'
+                        sh 'docker build -t johnpdevops/node-app:${VERSION} .'
                         echo "Logging in to DockerHub..."
                         sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
                         echo "Pushing Docker Image..."
