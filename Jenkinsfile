@@ -6,7 +6,8 @@ pipeline {
     stages {
         stage('Increment Version') {
             steps {
-                dir('app') {
+                script {
+                    cd ./app
                     env.VERSION = """${sh(script: 'npm version patch', returnStdout: true).trim()}"""
                     echo "Version: ${env.VERSION}"
                 }
