@@ -1,4 +1,5 @@
 pipeline {
+    // Another change
     agent any
     tools {
         nodejs 'node-21'
@@ -6,8 +7,10 @@ pipeline {
     stages {
         stage('Increment Version') {
             steps {
-                env.VERSION = """${sh(script: 'npm version patch', returnStdout: true).trim()}"""
-                echo "Version: ${env.VERSION}"
+                script{
+                    env.VERSION = """${sh(script: 'npm version patch', returnStdout: true).trim()}"""
+                    echo "Version: ${env.VERSION}"
+                }
             }
         }
         stage('Test') {
