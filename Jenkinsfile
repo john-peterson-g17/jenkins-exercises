@@ -53,7 +53,7 @@ pipeline {
                         sh 'git commit -m "Incremented version to $VERSION"'
 
                         echo "Pushing new version to git repository..."
-                        sh 'git push origin main'
+                        sh 'git push origin master'
                     }
                 }
             }
